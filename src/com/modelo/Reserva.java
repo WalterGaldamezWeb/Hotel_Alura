@@ -10,6 +10,11 @@ public class Reserva {
 	double valor;
 	String forma_pago;
 	
+	
+	
+	public Reserva() {
+	}
+
 	public Reserva(Date fecha_entrada, Date fecha_salida, double valor, String forma_pago) {
 		
 		this.fecha_entrada = fecha_entrada;

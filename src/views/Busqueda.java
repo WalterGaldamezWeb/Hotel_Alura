@@ -6,6 +6,10 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+
+import com.dao.DAOReserva;
+import com.modelo.Reserva;
+
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -33,21 +37,26 @@ public class Busqueda extends JFrame {
 	private JTextField txtBuscar;
 	private JTable tbHuespedes;
 	private JTable tbReservas;
-	private DefaultTableModel modelo;
+	private static DefaultTableModel modelo;
 	private DefaultTableModel modeloHuesped;
 	private JLabel labelAtras;
 	private JLabel labelExit;
 	int xMouse, yMouse;
+	
 
+	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) {		
+		
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					Busqueda frame = new Busqueda();
 					frame.setVisible(true);
+					cargarDatos();
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -58,6 +67,44 @@ public class Busqueda extends JFrame {
 	/**
 	 * Create the frame.
 	 */
+	//Inicio metodo cargar datos
+	public static void cargarDatos() {
+		System.out.println("Datos-Consola");
+		Reserva reserva = new Reserva();
+		DAOReserva daoReserva = new DAOReserva();
+		
+		Object[] obj = new Object[5];
+		List<Reserva> lista;
+		try {
+			lista = daoReserva.mostrarReserva();
+			
+			for(int i = 0; i < lista.size(); i++ ) {
+				
+				reserva = (Reserva) lista.get(i);
+				obj[0] = reserva.getId();
+				obj[1] = reserva.getFecha_entrada();
+				obj[2] = reserva.getFecha_salida();
+				obj[3] = reserva.getValor();
+				obj[4] = reserva.getForma_pago();
+				
+				modelo.addRow(obj);
+				
+				System.out.println("--Datos--consola--");						
+				System.out.println(reserva.getId());
+				System.out.println(reserva.getFecha_entrada());
+				System.out.println(reserva.getFecha_salida());
+				System.out.println(reserva.getValor());
+				System.out.println(reserva.getForma_pago());
+			}
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+	}//Fin metodo cargar datos
+	
 	public Busqueda() {
 		setIconImage(Toolkit.getDefaultToolkit().getImage(Busqueda.class.getResource("/imagenes/lupa2.png")));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -101,6 +148,8 @@ public class Busqueda extends JFrame {
 		modelo.addColumn("Fecha Check Out");
 		modelo.addColumn("Valor");
 		modelo.addColumn("Forma de Pago");
+		
+		
 		JScrollPane scroll_table = new JScrollPane(tbReservas);
 		panel.addTab("Reservas", new ImageIcon(Busqueda.class.getResource("/imagenes/reservado.png")), scroll_table, null);
 		scroll_table.setVisible(true);
@@ -216,7 +265,6 @@ public class Busqueda extends JFrame {
 		btnbuscar.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-
 			}
 		});
 		btnbuscar.setLayout(null);
