@@ -13,7 +13,7 @@ public class DAOReserva extends Conexion{
 	public List<Reserva> mostrarReserva() throws Exception {
 		
 		ResultSet resultado;
-		List<Reserva> listaReserva = new ArrayList();
+		List<Reserva> listaReserva = new ArrayList<Reserva>();
 		
 		try {
 			
@@ -44,6 +44,40 @@ public class DAOReserva extends Conexion{
 		}		
 		
 		return listaReserva;
+	}// fin mostrarReserva()
+	
+	
+	
+	public void crearReserva(Reserva reserva) throws Exception {
+		
+		try {
+			
+			this.conectar();
+			String sql = "INSERT INTO reservas (?,?,?,?)";
+			PreparedStatement preparedStatement = this.getConexion().prepareStatement(sql);
+			
+			preparedStatement.setDate(1, java.sql.Date.valueOf(reserva.getFecha_entrada().toString()));
+			preparedStatement.setDate(2, java.sql.Date.valueOf(reserva.getFecha_salida().toString()));
+			preparedStatement.setDouble(3, reserva.getValor());
+			preparedStatement.setString(4, reserva.getForma_pago());
+			
+			preparedStatement.executeUpdate();
+			
+			
+		} catch (Exception e) {
+			throw e;
+		}finally {
+			
+			this.desconectar();
+			
+		}
+		
 	}
+	
+	
+	
+	
+	
+	
 	
 }
